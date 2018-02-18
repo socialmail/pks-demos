@@ -9,6 +9,8 @@ Demonstrates deployment of a single node Elasticsearch cluster with persistent v
 ## Prerequisites
 1. A provisioned kubernetes cluster with at least 2 worker nodes. See PKS documentation to install PKS provision a k8s cluster, and connect via `kubectl`. https://docs.pivotal.io/runtimes/pks/1-0/
 
+2.Please make sure that "Enable Privileged Containers - Use with caution" option is selected for your Plan (Plan 1, Plan 2 etc) under PKS Configuration in Ops Manager.
+
 ## Steps
 
 1. Clone this repository.
@@ -28,7 +30,7 @@ Demonstrates deployment of a single node Elasticsearch cluster with persistent v
 
 This could also be changed to be a load balancer service if NSX-T is configured or running on GCP.
 
-5. Create Elastic Search Deployment
+5. Create Elastic Search Deployment (The worker node ID is the next IP  from your Kubernetes Master IP (x.x.x.17 if the Master IP is x.x.x.16), you can find the Kubernetes Master IP by executing  'PKS cluster <<cluster-name>>')
 
 `kubectl create -f es-deployment.yml`
 `kubectl get svc` to get the port.
