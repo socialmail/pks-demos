@@ -34,15 +34,15 @@ This could also be changed to be a load balancer service if NSX-T is configured 
 
 `kubectl create -f es-deployment.yml`
 `kubectl get svc` to get the port.
-`export ES_IP=<<ES_WORKER_NODE_IP>>:<<node_port>>`
-`curl http://$ES_IP:9200` to validate elasticsearch is running.
+`export ES_IP=<<ES_WORKER_NODE_IP>>:<<node_port>>` (Please use the 5 digit port number instead of 9200)
+`curl http://$ES_IP` to validate elasticsearch is running.
 
-5. Populate Elasticsearch cluster with data
+6. Populate Elasticsearch cluster with data (THIS STEP IS OPTIONAL , You can get the pod name from 'kubectl get svc' command, export pod name to $POD_NAME variable)
 
 At this point you can run `kubectl exec $POD_NAME -it -- bash -il` to open a bash session in your elasticsearch container.
 `cd /data` to inspect the persistent volume data structure before populating elastic search.
 
-Add an index
+7. Add an index
 ```
 curl -H'Content-Type: application/json' -X PUT http://$ES_IP/myindex -d '
 {"settings":
@@ -57,7 +57,7 @@ curl -H'Content-Type: application/json' -X PUT http://$ES_IP/myindex -d '
 
 `curl -X GET "http://$ES_IP:9200/myindex/_settings?pretty=true"`
 
-Then we are going to create a mapping of a type: order, which includes two properties - an ID and a customer_id.
+8. Then we are going to create a mapping of a type: order, which includes two properties - an ID and a customer_id.
 ```
 curl -H'Content-Type: application/json' -X POST http://$ES_IP/myindex/order/_mapping -d \ '
 {"order":
@@ -70,7 +70,7 @@ curl -H'Content-Type: application/json' -X POST http://$ES_IP/myindex/order/_map
 }'
 ```
 
-With this, we add two customer "documents" into the index with ids 1 and 2.
+9. With this, we add two customer "documents" into the index with ids 1 and 2.
 ```
 curl -i -H "Content-Type: application/json" -X POST "http://$ES_IP:9200/myindex/order/1?pretty=true" -d \
 '{
@@ -83,13 +83,14 @@ curl -i -H "Content-Type: application/json" -X POST "http://$ES_IP:9200/myindex/
 }'
 ```
 
-To validate we can request the data from elastic search:
-`curl -i -X GET "http://$ES_IP:9200/myindex/order/1?pretty=true"`
+10. To validate we can request the data from elastic search:
+`curl -i -X GET "http://$ES_IP/myindex/order/1?pretty=true"`
 
-6. Testing PKS HA
+11. Testing PKS HA
 
 Run this command to discover which worker node the elastic search pod is running on:
-`kubectl get pods -o wide`
+`kubectl get pods -o wide` 
+This informtion is available under Node. You may also use 'kubectl get nodes -o wide' and fetch the node that corresponds to the Worker node IP you fetched in step 5)
 
 Go to vCenter and "Power Off" the VM.
 
