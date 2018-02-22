@@ -55,7 +55,7 @@ curl -H'Content-Type: application/json' -X PUT http://$ES_IP/myindex -d '
 }'
 ```
 
-`curl -X GET "http://$ES_IP:9200/myindex/_settings?pretty=true"`
+`curl -X GET "http://$ES_IP/myindex/_settings?pretty=true"`
 
 8. Then we are going to create a mapping of a type: order, which includes two properties - an ID and a customer_id.
 ```
@@ -72,12 +72,12 @@ curl -H'Content-Type: application/json' -X POST http://$ES_IP/myindex/order/_map
 
 9. With this, we add two customer "documents" into the index with ids 1 and 2.
 ```
-curl -i -H "Content-Type: application/json" -X POST "http://$ES_IP:9200/myindex/order/1?pretty=true" -d \
+curl -i -H "Content-Type: application/json" -X POST "http://$ES_IP/myindex/order/1?pretty=true" -d \
 '{
   "customer_id": "customer1"
 }'
 
-curl -i -H "Content-Type: application/json" -X POST "http://$ES_IP:9200/myindex/order/2?pretty=true" -d \
+curl -i -H "Content-Type: application/json" -X POST "http://$ES_IP/myindex/order/2?pretty=true" -d \
 '{
   "customer_id": "customer2"
 }'
